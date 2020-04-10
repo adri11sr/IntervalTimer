@@ -1,3 +1,22 @@
 ion-content ion-toolbar {
-  --background: translucent;
+    --background: translucent;
+}
+
+#progress-circle {
+    margin-top: 50px;
+    transform: rotate(-90deg);
+}
+
+.timer-text {
+    margin-top: 20px;
+    font-size: 36px;
+    text-anchor: middle;
+    font-weight: 600;
+    fill: #333;
+}
+
+.timer-text-transform {
+    margin-top: 0px;
+    transform: rotate(90deg);
+    transform-origin: center;
 }
