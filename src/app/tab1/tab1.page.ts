@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, Inject, ViewChild, ElementRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { TimerService } from '../services/timer.service';
-import { Interval } from '../models/interval.model';
+import { Interval, Work } from '../models/models.index';
+import { DOCUMENT } from '@angular/common';
 
 const circleR = 80;
 const circleDasharray = 2 * Math.PI * circleR;
@@ -12,6 +13,22 @@ const circleDasharray = 2 * Math.PI * circleR;
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page {
+
+  works: Work[] = [];
+  // works: Work[] = [
+  //   {
+  //     name: 'Comba 1',
+  //     _id: '1'
+  //   },
+  //   {
+  //     name: 'Comba 2',
+  //     _id: '2'
+  //     },
+  //   {
+  //     name: 'Comba 3',
+  //     _id: '3'
+  //   }
+  //];
 
   time: BehaviorSubject<string> = new BehaviorSubject('00:00');  
   percent: BehaviorSubject<number> = new BehaviorSubject(100);
@@ -24,41 +41,73 @@ export class Tab1Page {
   state: 'start' | 'stop' = 'stop';
   startDuration = 1;
   totalDuration = 1;
-  numIntervalsInput = 0;
   numIntervalsDefault = 1;
 
-  tipo = 'a';
+  colorPrepare1 = '#ECBF09';
+  colorPrepare2 = '#FFE788 ';
+  colorWork1 = '#23AA1E';
+  colorWork2 = '#87F783 ';
+  colorRest1 = '#C6402D';
+  colorRest2 = '#F7A195 ';
+
+  type = 'a';
+  name;
+
+  urlSoundFinal = '../../assets/sounds/28053__erdie__wooden02.wav';
+  urlSound321 = '../../assets/sounds/28260__erdie__wooden05.ogg';
 
   indexInterval = 0;
+
+  reproduciendo = true;
 
   circleR = circleR;
   circleDasharray = circleDasharray;
 
+  public work:Work; 
+
   constructor(
-    private _TimerService: TimerService
+    private _TimerService: TimerService,
+    @Inject(DOCUMENT) document
   ) {}
   
 
   ngOnInit() {
+    
+    this.getInterval()
+    this.configInterval();
 
-    this.getInterval();
-    this.numIntervalsDefault = this.intervalBD.length;
-    this.startDuration = +this.intervalBD[this.indexInterval].time;
-    this.tipo = this.intervalBD[this.indexInterval].tipo;
-    console.log(this.numIntervalsDefault + '-' +  this.startDuration);
+    let worksRes = this._TimerService.getListWorksFB();
+    worksRes.snapshotChanges().subscribe(res => {
+      this.works = [];
+      res.forEach(item => {
+        let a = item.payload.toJSON();
+        console.log(a);
+        console.log(item);
+        a['$key'] = item.key;
+        this.works.push(a as Work);
+        console.log('works ' + this.works);
+      })
+    })
+    
   }
 
+  configInterval() {
+    //this.getInterval();
+    this.indexInterval = 0;
+    this.numIntervalsDefault = this.intervalBD.length;
+    this.startDuration = +this.intervalBD[this.indexInterval].time;
+    this.type = this.intervalBD[this.indexInterval].type;
+    this.name = this.intervalBD[this.indexInterval].name;
+    console.log(this.numIntervalsDefault + '-' +  this.startDuration);
+    this.setColorCircle();
+  }
 
   getInterval(){
     this.intervalBD = this._TimerService.getInterval();
   }
 
-
   startProcess(){
-    if (this.numIntervalsInput > 0){
 
-      this.numIntervalsDefault = this.numIntervalsInput;
-    }
     this.starTimer(this.startDuration);
   }
 
@@ -78,7 +127,8 @@ export class Tab1Page {
     this.time.next('00:00');
     this.state = 'stop';
     this.percent.next(100);
-    this.numIntervalsDefault = this.intervalBD.length;
+    this.indexInterval = 0;
+    this.configInterval();
   }
 
   percentageOffset(percent){
@@ -105,6 +155,12 @@ export class Tab1Page {
     const percentage = ((totalTime - this.timer) / totalTime) * 100;
     this.percent.next(percentage);
 
+    if(this.timer <= 3 && this.timer > 0) {
+      this.reproducir(this.urlSound321);
+    }else if (this.timer == 0) {
+      this.reproducir(this.urlSoundFinal);
+    }
+
     --this.timer;
     if (this.timer < -1) {
       --this.numIntervalsDefault;
@@ -114,10 +170,90 @@ export class Tab1Page {
         console.log('StopTimer');
       } else{
         this.startDuration = +this.intervalBD[++this.indexInterval].time;
-        this.tipo = this.intervalBD[this.indexInterval].tipo;
+        this.setColorCircle();
+        this.type = this.intervalBD[this.indexInterval].type;
+        this.name = this.intervalBD[this.indexInterval].name;        
         this.starTimer(this.startDuration);     
       }
     }
+
+  }
+
+  setColorCircle() {
+
+    switch(this.intervalBD[this.indexInterval].type){
+      case 'Prepare': {  
+        let color1 = document.getElementById('color-1');
+        color1.setAttribute('stop-color', this.colorPrepare1);
+
+        let color2 = document.getElementById('color-2');
+        color2.setAttribute('stop-color', this.colorPrepare2);
+
+        break;
+      }
+      case 'work': {  
+        let color1 = document.getElementById('color-1');
+        color1.setAttribute('stop-color', this.colorWork1);
+
+        let color2 = document.getElementById('color-2');
+        color2.setAttribute('stop-color', this.colorWork2);
+
+        break;
+      }
+      case 'Rest': {  
+        let color1 = document.getElementById('color-1');
+        color1.setAttribute('stop-color', this.colorRest1);
+
+        let color2 = document.getElementById('color-2');
+        color2.setAttribute('stop-color', this.colorRest2);
+
+        break;
+      } 
+      default: {
+        break;
+      }
+    }
+
+  }
+
+  reproducir (audioIn) {
+    console.log(audioIn);
+
+    let audio = new Audio();
+
+    audio.src = audioIn;
+    this.reproduciendo = true;
+    audio.load();
+    audio.play();
+
+    setTimeout(() => {
+      this.reproduciendo = false;
+    }, 1000);
+  }
+
+  onChange(id: string) {
+
+    console.log('id = '+ id);
+
+   /* this._TimerService.getIntervalByWorkID(id).valueChanges().subscribe(res => {
+      console.log('o ' + res.name);
+    }); */
+
+    let intervalsRes = this._TimerService.getIntervalByWorkID(id);
+    intervalsRes.snapshotChanges().subscribe(res => {
+      this.intervalBD = [];
+      // let a = res[0].payload.toJSON();
+      // console.log(a);
+      res.forEach(item => {
+        let a = item.payload.toJSON();
+        console.log(a);
+        console.log(item);
+        a['$key'] = item.key;
+        this.intervalBD.push(a as Interval);
+        console.log('intervals ' + this.intervalBD);
+        this.configInterval();
+      })
+    })
 
   }
 

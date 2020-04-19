@@ -1,10 +1,11 @@
 export class Interval {
 
     constructor(
-        public tipo: string,
+        public type: string,
         public time: string,
-        public nombre: string,
-        public _id?: string
+        public name: string,
+        public workID: string,
+        public $key?: string
     ) { }
 
 }
