@@ -56,5 +56,7 @@
 </ion-content>
 <ion-footer>
     <ion-button *ngIf="state === 'stop'" expand="block" color="primary" (click)="startProcess()">START</ion-button>
-    <ion-button *ngIf="state === 'start'" expand="block" color="danger" (click)="stopTimer()">STOP</ion-button>
+    <ion-button *ngIf="state === 'resume'" expand="block" color="success" (click)="resumeTimer()">RESUME</ion-button>
+    <ion-button *ngIf="state === 'start'" expand="block" color="success" (click)="pauseTimer()">PAUSE</ion-button>
+    <ion-button *ngIf="state === 'start' || state === 'resume'" expand="block" color="danger" (click)="stopTimer()">STOP</ion-button>
 </ion-footer>

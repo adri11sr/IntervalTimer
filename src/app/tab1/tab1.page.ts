@@ -38,7 +38,7 @@ export class Tab1Page {
 
   intervalBD: Interval[] = [];
 
-  state: 'start' | 'stop' = 'stop';
+  state: 'start' | 'stop' | 'resume' = 'stop';
   startDuration = 1;
   totalDuration = 1;
   numIntervalsDefault = 1;
@@ -107,8 +107,19 @@ export class Tab1Page {
   }
 
   startProcess(){
-
     this.starTimer(this.startDuration);
+  }
+
+  pauseTimer() {
+
+    this.state = 'resume';
+    clearInterval(this.interval);
+
+  }
+
+  resumeTimer() {
+    this.state = 'start';
+    this.starTimer(this.timer)
   }
 
   starTimer(duration: number) {
