@@ -4,7 +4,7 @@
             Tab 1
         </ion-title>
     </ion-toolbar> -->
-    <ion-item>
+    <ion-item *ngIf="state === 'stop'" expand="block">
         <ion-label>Selected a work</ion-label>
         <ion-select [(ngModel)]="work" value="" okText="Okay" cancelText="Dismiss" (ionChange)="onChange(work)">
             <ion-select-option [value]="work.$key" *ngFor="let work of works">{{work.name}}</ion-select-option>

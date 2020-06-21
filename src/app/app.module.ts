@@ -4,6 +4,7 @@ import { RouteReuseStrategy } from '@angular/router';
 
 //  firebase imports, remove what you don't require
 import { AngularFireModule } from '@angular/fire';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireStorageModule } from '@angular/fire/storage';
@@ -16,7 +17,11 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
+import { RutinasWiletics } from './localData/rutinas.index';
+import { LocalDataModule } from './localData/localData.module';
+import { rutinaIntermedia } from './localData/RutinasWiletics/rutina-intermedia';
+import { rutinaBasica } from './localData/RutinasWiletics/rutina-basica';
+import { rutinaAvanzada } from './localData/RutinasWiletics/rutina-avazada';
 
 @NgModule({
   declarations: [AppComponent],
@@ -33,7 +38,11 @@ import { AppComponent } from './app.component';
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    AngularFirestore,
+    rutinaIntermedia,
+    rutinaBasica,
+    rutinaAvanzada
   ],
   bootstrap: [AppComponent]
 })

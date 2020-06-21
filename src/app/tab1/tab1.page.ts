@@ -4,6 +4,11 @@ import { TimerService } from '../services/timer.service';
 import { Interval, Work } from '../models/models.index';
 import { DOCUMENT } from '@angular/common';
 
+import {rutinaIntermedia } from '../localData/RutinasWiletics/rutina-intermedia';
+import {RutinasWiletics } from '../localData/rutinas.index';
+import { rutinaBasica } from '../localData/RutinasWiletics/rutina-basica';
+import { rutinaAvanzada } from '../localData/RutinasWiletics/rutina-avazada';
+
 const circleR = 80;
 const circleDasharray = 2 * Math.PI * circleR;
 
@@ -29,6 +34,8 @@ export class Tab1Page {
   //     _id: '3'
   //   }
   //];
+
+  public allInterval: Interval[][] = [];
 
   time: BehaviorSubject<string> = new BehaviorSubject('00:00');  
   percent: BehaviorSubject<number> = new BehaviorSubject(100);
@@ -67,7 +74,10 @@ export class Tab1Page {
 
   constructor(
     private _TimerService: TimerService,
-    @Inject(DOCUMENT) document
+    @Inject(DOCUMENT) document,
+    public _basica: rutinaBasica,
+    public _intermedia: rutinaIntermedia,
+    public _avanzada: rutinaAvanzada
   ) {}
   
 
@@ -75,8 +85,13 @@ export class Tab1Page {
     
     this.getInterval()
     this.configInterval();
+    this.getListWorkouts();
+    
+  }
 
-    let worksRes = this._TimerService.getListWorksFB();
+  getListWorkouts() {
+
+    /*let worksRes = this._TimerService.getListWorksFB();
     worksRes.snapshotChanges().subscribe(res => {
       this.works = [];
       res.forEach(item => {
@@ -87,8 +102,13 @@ export class Tab1Page {
         this.works.push(a as Work);
         console.log('works ' + this.works);
       })
-    })
-    
+    })*/
+
+    this.works = this._basica.WorksBasica.concat(this._intermedia.WorksIntermedio).concat(this._avanzada.WorksAvanzado);
+    this.allInterval = this._intermedia.works.concat(this._basica.works).concat(this._avanzada.works);
+    console.log('intervals ' + this.allInterval + 'dfafd' + this.allInterval);
+    console.log('works ' + this.works);
+
   }
 
   configInterval() {
@@ -228,6 +248,7 @@ export class Tab1Page {
   }
 
   reproducir (audioIn) {
+    
     console.log(audioIn);
 
     let audio = new Audio();
@@ -240,13 +261,22 @@ export class Tab1Page {
     setTimeout(() => {
       this.reproduciendo = false;
     }, 1000);
+
   }
 
   onChange(id: string) {
 
     console.log('id = '+ id);
 
-   /* this._TimerService.getIntervalByWorkID(id).valueChanges().subscribe(res => {
+    this.intervalBD = this.allInterval[+id-1];
+    this.configInterval();
+    console.log(this.intervalBD);   
+
+  }
+
+  setIntevalByID_firebase(id: string){
+
+     /* this._TimerService.getIntervalByWorkID(id).valueChanges().subscribe(res => {
       console.log('o ' + res.name);
     }); */
 
@@ -264,7 +294,13 @@ export class Tab1Page {
         console.log('intervals ' + this.intervalBD);
         this.configInterval();
       })
-    })
+    });
+
+  }
+
+  setIntevalByID_Local (id: string){
+
+    
 
   }
 

@@ -1,0 +1,23 @@
+<ion-card>
+    <ion-card-content>
+        <ion-item>
+            <ion-label>Name:</ion-label>
+            <ion-input class="form-control" name="name" [(ngModel)]="name" (ngModelChange)="onChanges()"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Type</ion-label>
+            <ion-select name="type" [(ngModel)]="type" (value)="type" (ngModelChange)="onChanges()" okText="Okay" cancelText="Dismiss">
+                <ion-select-option value="Prepare">Prepare</ion-select-option>
+                <ion-select-option value="Work">Work</ion-select-option>
+                <ion-select-option value="Rest">Rest</ion-select-option>
+            </ion-select>
+        </ion-item>
+        <ion-item>
+            <ion-label>Time:</ion-label>
+            <!-- <ion-datetime name="time" [(ngModel)]="time" (ngModelChange)="onChanges($event)" display-format="mm:ss"></ion-datetime> -->
+            <ion-input type="number" style="border: solid;" class="form-control" name="timeM" [(ngModel)]="timeM" (ngModelChange)="onChanges()"></ion-input>
+            <ion-input type="number" style="border: solid;" class="form-control" name="timeS" [(ngModel)]="timeS" (ngModelChange)="onChanges()"></ion-input>
+        </ion-item>
+    </ion-card-content>
+    <ion-button *ngIf="state === 'visible'" (click)="summitChanges(name,type,timeM,timeS)">V</ion-button>
+</ion-card>

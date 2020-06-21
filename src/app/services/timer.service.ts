@@ -1,464 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Interval, Work } from '../models/models.index';
 import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angular/fire/database';
+import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TimerService {
 
-  interval1: Interval[] = [
-    {
-      type:'Prepare',
-      time:'20',
-      name:'Basic',
-      workID:'2'
-    },
-    {
-      type:'Work',
-      time:'120',
-      name:'Basic',
-      workID:'2'
-    },
-    {
-      type:'Rest',
-      time:'30',
-      name:'Basic',
-      workID:'2'
-    },
-    {
-      type:'Work',
-      time:'120',
-      name:'Basic',
-      workID:'2'
-    },
-    {
-      type:'Rest',
-      time:'30',
-      name:'Basic',
-      workID:'2'
-    },
-    {
-      type:'Work',
-      time:'120',
-      name:'Basic',
-      workID:'2'
-    },
-    {
-      type:'Rest',
-      time:'60',
-      name:'Basic',
-      workID:'2'
-    },
-    {
-      type:'Work',
-      time:'120',
-      name:'Basic',
-      workID:'2'
-    },
-    {
-      type:'Rest',
-      time:'30',
-      name:'Basic',
-      workID:'2'
-    },
-    {
-      type:'Work',
-      time:'180',
-      name:'Basic',
-      workID:'2'
-    },
-    {
-      type:'Rest',
-      time:'30',
-      name:'Basic',
-      workID:'2'
-    },
-    {
-      type:'Work',
-      time:'180',
-      name:'Basic',
-      workID:'2'
-    },
-    {
-      type:'Rest',
-      time:'60',
-      name:'Basic',
-      workID:'2'
-    },
-  ];
-
-
-  interval: Interval[] = [
+  interval5: Interval[] = [
     {
       type:'Prepare',
       time:'20',
       name:'Prepare',
       workID:'1'
-    },
-    {
-      name:'Apertura Frontal',
-      time:'60',
-      type:'work',
-      workID:'1'
-    },
-    {
-      name:'Rest',
-      time:'30',
-      type:'Rest',
-      workID:'1'
-    },
-    {
-      name:'Apertura Lateral',
-      time:'60',
-      type:'work',
-      workID:'1'
-    },
-    {
-      name:'Rest',
-      time:'60',
-      type:'Rest',
-      workID:'1'
-    },
-    {
-      name:'Apertura Frontal',
-      time:'120',
-      type:'work',
-      workID:'1'
-    },
-    {
-      name:'Rest',
-      time:'30',
-      type:'Rest',
-      workID:'1'
-    },
-    {
-      name:'Apertura Lateral',
-      time:'120',
-      type:'work',
-      workID:'1'
-    },
-    {
-      name:'Rest',
-      time:'60',
-      type:'Rest',
-      workID:'1'
-    },
-    {
-      name:'Toques Talon RPS',
-      time:'30',
-      type:'work',
-      workID:'1'
-    },
-    {
-      name:'Rest',
-      time:'60',
-      type:'Rest',
-      workID:'1'
-    },
-    {
-      name:'Semi-Apertura frotal RPS',
-      time:'30',
-      type:'work',
-      workID:'1'
-    },
-    {
-      name:'Rest',
-      time:'60',
-      type:'Rest',
-      workID:'1'
-    },
-    {
-      name:'Apertura Frontal RPS',
-      time:'30',
-      type:'work',
-      workID:'1'
-    }
-    ,
-    {
-      name:'Rest',
-      time:'60',
-      type:'Rest',
-      workID:'1'
-    },
-    {
-      name:'Toques Talon RPS',
-      time:'30',
-      type:'work',
-      workID:'1'
-    },
-    {
-      name:'Rest',
-      time:'60',
-      type:'Rest',
-      workID:'1'
-    },
-    {
-      name:'Semi-Apertura frotal RPS',
-      time:'30',
-      type:'work',
-      workID:'1'
-    },
-    {
-      name:'Rest',
-      time:'60',
-      type:'Rest',
-      workID:'1'
-    },
-    {
-      name:'Apertura Frontal RPS',
-      time:'30',
-      type:'work',
-      workID:'1'
-    }
-  ];
-
-  interval4: Interval[] = [
-    {
-      type:'Prepare',
-      time:'20',
-      name:'Prepare',
-      workID:'1'
-    },
-    {
-      name:'Toques Talon',
-      time:'60',
-      type:'work',
-      workID:'1'
-    },
-    {
-      name:'Rest',
-      time:'30',
-      type:'Rest',
-      workID:'1'
-    },
-    {
-      name:'Semi-Apertura frotal',
-      time:'60',
-      type:'work',
-      workID:'1'
-    },
-    {
-      name:'Rest',
-      time:'60',
-      type:'Rest',
-      workID:'1'
-    },
-    {
-      name:'Toques Talon',
-      time:'180',
-      type:'work',
-      workID:'1'
-    },
-    {
-      name:'Rest',
-      time:'30',
-      type:'Rest',
-      workID:'1'
-    },
-    {
-      name:'Semi-Apertura frotal',
-      time:'180',
-      type:'work',
-      workID:'1'
-    },
-    {
-      name:'Rest',
-      time:'60',
-      type:'Rest',
-      workID:'1'
-    },
-    {
-      name:'Pies Alternos RPS',
-      time:'30',
-      type:'work',
-      workID:'1'
-    },
-    {
-      name:'Rest',
-      time:'60',
-      type:'Rest',
-      workID:'1'
-    },
-    {
-      name:'Rodillas arriba RPS',
-      time:'30',
-      type:'work',
-      workID:'1'
-    },
-    {
-      name:'Rest',
-      time:'60',
-      type:'Rest',
-      workID:'1'
-    },
-    {
-      name:'Talones atrás RPS',
-      time:'30',
-      type:'work',
-      workID:'1'
-    }
-    ,
-    {
-      name:'Rest',
-      time:'60',
-      type:'Rest',
-      workID:'1'
-    },
-    {
-      name:'Pies Alternos RPS',
-      time:'30',
-      type:'work',
-      workID:'1'
-    },
-    {
-      name:'Rest',
-      time:'60',
-      type:'Rest',
-      workID:'1'
-    },
-    {
-      name:'Rodillas arriba RPS',
-      time:'30',
-      type:'work',
-      workID:'1'
-    },
-    {
-      name:'Rest',
-      time:'60',
-      type:'Rest',
-      workID:'1'
-    },
-    {
-      name:'Talones atrás RPS',
-      time:'30',
-      type:'work',
-      workID:'1'
-    }
-  ];
-
-
-  interval2: Interval[] = [
-    {
-      type:'Prepare',
-      time:'20',
-      name:'Prepare',
-      workID:'3'
-    },
-    {
-      name:'Toques Talon',
-      time:'60',
-      type:'work',
-      workID:'3'
-    },
-    {
-      name:'Rest',
-      time:'30',
-      type:'Rest',
-      workID:'3'
-    },
-    {
-      name:'Semi-Apertura frotal',
-      time:'60',
-      type:'work',
-      workID:'3'
-    },
-    {
-      name:'Rest',
-      time:'60',
-      type:'Rest',
-      workID:'3'
-    },
-    {
-      name:'Toques Talon',
-      time:'120',
-      type:'work',
-      workID:'3'
-    },
-    {
-      name:'Rest',
-      time:'30',
-      type:'Rest',
-      workID:'3'
-    },
-    {
-      name:'Semi-Apertura frotal',
-      time:'120',
-      type:'work',
-      workID:'3'
-    },
-    {
-      name:'Rest',
-      time:'60',
-      type:'Rest',
-      workID:'3'
-    },
-    {
-      name:'Sencillos RPS',
-      time:'30',
-      type:'work',
-      workID:'3'
-    },
-    {
-      name:'Rest',
-      time:'60',
-      type:'Rest',
-      workID:'3'
-    },
-    {
-      name:'Pies Alternos RPS',
-      time:'30',
-      type:'work',
-      workID:'3'
-    },
-    {
-      name:'Rest',
-      time:'60',
-      type:'Rest',
-      workID:'3'
-    },
-    {
-      name:'Rodillas arriba RPS',
-      time:'30',
-      type:'work',
-      workID:'3'
-    }
-    ,
-    {
-      name:'Rest',
-      time:'60',
-      type:'Rest',
-      workID:'3'
-    },
-    {
-      name:'Sencillos RPS',
-      time:'30',
-      type:'work',
-      workID:'3'
-    },
-    {
-      name:'Rest',
-      time:'60',
-      type:'Rest',
-      workID:'3'
-    },
-    {
-      name:'Pies Alternos RPS',
-      time:'30',
-      type:'work',
-      workID:'3'
-    },
-    {
-      name:'Rest',
-      time:'60',
-      type:'Rest',
-      workID:'3'
-    },
-    {
-      name:'Rodillas arriba RPS',
-      time:'30',
-      type:'work',
-      workID:'3'
     }
   ];
 
@@ -467,14 +22,18 @@ export class TimerService {
   worksListRef: AngularFireList<any>;
   worksRef: AngularFireObject<any>;
 
+  private workCollection: AngularFirestoreCollection<Work>;
 
   intervalsListRef: AngularFireList<any>; 
   intervalsRef: AngularFireObject<any>;
 
-  constructor(private db: AngularFireDatabase) { }
+  constructor(
+    private db: AngularFireDatabase,
+    private firestore: AngularFirestore
+    ) { }
 
   getInterval(){
-    return this.interval;
+    return this.interval5;                                                                                           
   }
 
   getIntervalByWorkID(id: string){
@@ -487,6 +46,32 @@ export class TimerService {
   getListWorksFB(){
     this.worksListRef = this.db.list('/works');
     return this.worksListRef;
+  }
+
+  createWorkout(workout: Work){
+
+    let workRef = this.firestore.collection('works').add({
+      name: 'Tokyo',
+      duration: '0'
+    }).then(ref => {
+      console.log('Added document with ID: ', ref.id);
+    });
+    //return this.workCollection.add(workout);
+    /*return this.worksListRef.push({
+      name: workout.name,
+      duration: workout.duration,
+    })*/
+
+  }
+
+  insertInterval(intervals: [Interval]){
+
+  }
+
+  // Delete
+  deleteWorkout(id: string) {
+    this.worksRef = this.db.object('/appointment/' + id);
+    this.worksRef.remove();
   }
 
 }

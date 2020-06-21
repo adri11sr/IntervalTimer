@@ -1,0 +1,33 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>workout</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+    <ion-card>
+        <ion-card-header>
+            <app-workout-detail (workOutput)="cambioWork($event)" [workChild]=workout></app-workout-detail>
+        </ion-card-header>
+
+        <ion-card-content>
+            <ion-item>
+                <ion-title>Intervals</ion-title>
+            </ion-item>
+            <ion-list>
+                <ion-item *ngFor="let interval of intervals">
+                    <app-interval-detail (IntervalOutput)="cambioIntervalo($event)" [intervalChild]=interval></app-interval-detail>
+                    <ion-button color="danger" (click)="removeInterval(interval.orden)">-</ion-button>
+                </ion-item>
+            </ion-list>
+            <ion-item>
+                <ion-button (click)="addInterval()">+</ion-button>
+                <ion-button color="success" (click)="crearWorkout()">Save</ion-button>
+            </ion-item>
+        </ion-card-content>
+    </ion-card>
+
+
+
+</ion-content>

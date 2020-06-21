@@ -5,6 +5,7 @@ export class Interval {
         public time: string,
         public name: string,
         public workID: string,
+        public orden?: number,
         public $key?: string
     ) { }
 
